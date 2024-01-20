@@ -54,4 +54,8 @@ public class PhoneNumberService {
     public boolean updatePhone(Long id, PhoneNumber phoneNumber) {
         return daoPhoneNumber.updatePhone(id, phoneNumber);
     }
+
+    public boolean deletePhone(Long id) {
+        return daoPhoneNumber.deletePhone(id);
+    }
 }

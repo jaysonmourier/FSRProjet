@@ -7,6 +7,7 @@ import com.miage.app.services.ContactService;
 import com.miage.app.services.PhoneNumberService;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -53,5 +54,12 @@ public class PhoneNumberController {
     @Produces({MediaType.APPLICATION_JSON})
     public Response update(@PathParam("id") Long id, PhoneNumber phoneNumber) {
         return Response.status(this.phoneNumberService.updatePhone(id, phoneNumber) ? Response.Status.OK.getStatusCode() : Response.Status.NOT_FOUND.getStatusCode()).build();
+    }
+
+    @DELETE
+    @Path("/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response delete(@PathParam("id") Long id) {
+        return Response.status(this.phoneNumberService.deletePhone(id) ? Response.Status.OK.getStatusCode() : Response.Status.NOT_FOUND.getStatusCode()).build();
     }
 }
