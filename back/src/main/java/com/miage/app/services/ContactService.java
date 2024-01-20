@@ -22,7 +22,7 @@ public class ContactService {
 
     public ContactDTO getContact(Long id) {
         Contact contact = daoContact.getContact(id);
-       return contact == null ? null : convertToContactDTO(contact);
+        return contact == null ? null : convertToContactDTO(contact);
     }
 
     public List<ContactDTO> getAllContacts() {
@@ -36,11 +36,12 @@ public class ContactService {
         contactDTO.setFirstname(contact.getFirstname());
         contactDTO.setLastname(contact.getLastname());
         contactDTO.setEmail(contact.getEmail());
-        contactDTO.setPhoneNumbers(contact.getPhoneNumbers().stream().map(this::convertToPhoneNumberDTO).collect(Collectors.toList()));
+        contactDTO.setPhoneNumbers(
+                contact.getPhoneNumbers().stream().map(this::phoneNumberToPhoneNumberDTO).collect(Collectors.toList()));
         return contactDTO;
     }
 
-    public PhoneNumberDTO convertToPhoneNumberDTO(PhoneNumber phoneNumber) {
+    public PhoneNumberDTO phoneNumberToPhoneNumberDTO(PhoneNumber phoneNumber) {
         PhoneNumberDTO phoneNumberDTO = new PhoneNumberDTO();
         phoneNumberDTO.setId(phoneNumber.getId());
         phoneNumberDTO.setPhoneKind(phoneNumber.getPhoneKind());

@@ -1,7 +1,10 @@
 package com.miage.app.daos;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
 
 import com.miage.app.config.EntityManagerConfig;
 import com.miage.app.entities.PhoneNumber;
@@ -28,4 +31,67 @@ public class DAOPhoneNumber {
         }
         return state;
     }
+
+    public PhoneNumber getPhoneNumber(Long id) {
+        EntityManager em = null;
+        PhoneNumber phoneNumber = null;
+        try {
+            em = EntityManagerConfig.getEmf().createEntityManager();
+            phoneNumber = em.find(PhoneNumber.class, id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
+        }
+        return phoneNumber;
+    }
+
+    public List<PhoneNumber> getAllPhoneNumbers() {
+       EntityManager em = null;
+        List<PhoneNumber> phones = null;
+        try {
+            em = EntityManagerConfig.getEmf().createEntityManager();
+            TypedQuery<PhoneNumber> query = em.createQuery("SELECT p FROM PhoneNumber p", PhoneNumber.class);
+            phones = query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
+        }
+        return phones;
+    }
+
+    public boolean updatePhone(Long id, PhoneNumber updatedPhoneNumber) {
+        EntityManager em = null;
+        try {
+            em = EntityManagerConfig.getEmf().createEntityManager();
+            PhoneNumber phoneNumber = em.find(PhoneNumber.class, id);
+    
+            if (phoneNumber == null) {
+                return false;
+            }
+    
+            phoneNumber.setPhoneKind(updatedPhoneNumber.getPhoneKind());
+            phoneNumber.setPhoneNumber(updatedPhoneNumber.getPhoneNumber());
+    
+            EntityTransaction et = em.getTransaction();
+            et.begin();
+            em.merge(phoneNumber);
+            et.commit();
+    
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false; 
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
+        }
+    }
+    
 }

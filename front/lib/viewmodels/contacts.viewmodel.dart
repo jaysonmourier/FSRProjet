@@ -7,6 +7,7 @@ class ContactsViewModel {
   List<Contact>? contacts;
 
   List<Contact>? getContactsList() {
+    contacts?.sort((a, b) => a.firstname!.compareTo(b.firstname!));
     return contacts;
   }
 

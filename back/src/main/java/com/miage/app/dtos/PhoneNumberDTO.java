@@ -1,9 +1,20 @@
 package com.miage.app.dtos;
 
+import com.miage.app.entities.Contact;
+
 public class PhoneNumberDTO {
     private long id;
     private String phoneKind;
     private String phoneNumber;
+    private ContactDTO contact;
+
+    public ContactDTO getContact() {
+        return contact;
+    }
+
+    public void setContact(ContactDTO contact) {
+        this.contact = contact;
+    }
 
     public String getPhoneNumber() {
         return phoneNumber;

@@ -16,7 +16,7 @@ class ContactTile extends StatelessWidget {
     if (contact.email == null) {
       return const Text("No email");
     }
-    return Text(contact.email!);
+    return Text(contact.email!, maxLines: 1, overflow: TextOverflow.ellipsis);
   }
 
   Widget getPhoneNumber() {

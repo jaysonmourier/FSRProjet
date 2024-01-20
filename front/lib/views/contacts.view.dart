@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front/models/contact.model.dart';
+import 'package:front/utils/contact.utils.dart';
 import 'package:front/viewmodels/contacts.viewmodel.dart';
 import 'package:front/widget/contact_tile.widget.dart';
 
@@ -14,7 +15,7 @@ class _ContactsViewState extends State<ContactsView> {
   final ContactsViewModel viewModel = ContactsViewModel();
 
   Widget buildContactList(List<Contact>? contacts) {
-    if((contacts == null) || (contacts.isEmpty)) return const Text("No contacts");
+    if((contacts == null) || (contacts.isEmpty)) return ContactUtils().noContactsFound();
     return ListView.builder(
         itemCount: contacts.length,
         itemBuilder: (context, index) {
@@ -24,11 +25,10 @@ class _ContactsViewState extends State<ContactsView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: FutureBuilder(
+    return FutureBuilder(
             future: viewModel.getAllContacts(),
             builder: (context, snapshot) {
-              return viewModel.buildWidget(snapshot, buildContactList(viewModel.getContactsList()), const CircularProgressIndicator());
-            }));
+              return viewModel.buildWidget(snapshot, buildContactList(viewModel.getContactsList()), const Center(child: CircularProgressIndicator()));
+            });
   }
 }
