@@ -9,6 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -30,6 +32,10 @@ public class Contact {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "contact", fetch = FetchType.EAGER)
     private List<PhoneNumber> phoneNumbers = new ArrayList<>();
+
+    // @ManyToOne
+    // @JoinColumn(name = "address_id")
+    // private Address address;
 
     public Contact(String firstname, String lastname, String email) {
         this.firstname = firstname;

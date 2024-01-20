@@ -21,16 +21,16 @@ public class PhoneNumberService {
         System.out.println("PHONE NUMBER SERVICE");
         System.out.println(phoneNumber);
         System.out.println("\n\n");
-        return daoPhoneNumber.addPhoneNumber(phoneNumber);
+        return daoPhoneNumber.add(phoneNumber);
     }
 
     public Object getAllPhone() {
-        List<PhoneNumber> phones = daoPhoneNumber.getAllPhoneNumbers();
+        List<PhoneNumber> phones = daoPhoneNumber.getAll();
         return phones.stream().map(this::convertToPhoneDTO).collect(Collectors.toList());
     }
 
     public PhoneNumberDTO getPhone(Long id) {
-        PhoneNumber phone = daoPhoneNumber.getPhoneNumber(id);
+        PhoneNumber phone = daoPhoneNumber.get(id);
         return phone == null ? null : convertToPhoneDTO(phone);
     }
 
@@ -52,10 +52,10 @@ public class PhoneNumberService {
     }
 
     public boolean updatePhone(Long id, PhoneNumber phoneNumber) {
-        return daoPhoneNumber.updatePhone(id, phoneNumber);
+        return daoPhoneNumber.update(id, phoneNumber);
     }
 
     public boolean deletePhone(Long id) {
-        return daoPhoneNumber.deletePhone(id);
+        return daoPhoneNumber.delete(id);
     }
 }

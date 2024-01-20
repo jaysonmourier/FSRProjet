@@ -17,16 +17,16 @@ public class ContactService {
     }
 
     public boolean addContact(Contact contact) {
-        return daoContact.addContact(contact);
+        return daoContact.add(contact);
     }
 
     public ContactDTO getContact(Long id) {
-        Contact contact = daoContact.getContact(id);
+        Contact contact = daoContact.get(id);
         return contact == null ? null : convertToContactDTO(contact);
     }
 
     public List<ContactDTO> getAllContacts() {
-        List<Contact> contacts = daoContact.getContacts();
+        List<Contact> contacts = daoContact.getAll();
         return contacts.stream().map(this::convertToContactDTO).collect(Collectors.toList());
     }
 
@@ -50,14 +50,14 @@ public class ContactService {
     }
 
     public boolean updateContact(Long id, Contact contact) {
-        Contact contactToUpdate = daoContact.getContact(id);
+        Contact contactToUpdate = daoContact.get(id);
         if (contactToUpdate == null) {
             return false;
         }
-        return daoContact.updateContact(contact);
+        return daoContact.update(contact);
     }
 
     public boolean deleteContact(Long id) {
-        return daoContact.deleteContact(id);
+        return daoContact.delete(id);
     }
 }

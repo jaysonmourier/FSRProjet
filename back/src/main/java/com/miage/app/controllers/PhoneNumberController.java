@@ -1,9 +1,7 @@
 package com.miage.app.controllers;
 
 import com.miage.app.dtos.PhoneNumberDTO;
-import com.miage.app.entities.Contact;
 import com.miage.app.entities.PhoneNumber;
-import com.miage.app.services.ContactService;
 import com.miage.app.services.PhoneNumberService;
 
 import javax.ws.rs.Consumes;

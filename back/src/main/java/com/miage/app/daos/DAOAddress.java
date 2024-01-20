@@ -7,22 +7,23 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 
 import com.miage.app.config.EntityManagerConfig;
-import com.miage.app.entities.Contact;
+import com.miage.app.entities.Address;
 
-public class DAOContact {
-    public DAOContact() {
+public class DAOAddress {
+    public DAOAddress() {
         super();
     }
 
-    public boolean add(Contact contact) {
+    public boolean add(Address address) {
         boolean state = false;
         try {
-            Contact newContact = new Contact(contact.getFirstname(), contact.getLastname(), contact.getEmail());
+            Address newAddress = new Address(address.getStreet(), address.getCity(), address.getZip(),
+                    address.getCountry());
 
             EntityManager em = EntityManagerConfig.getEmf().createEntityManager();
             EntityTransaction et = em.getTransaction();
             et.begin();
-            em.persist(newContact);
+            em.persist(newAddress);
             et.commit();
             em.close();
             state = true;
@@ -32,12 +33,12 @@ public class DAOContact {
         return state;
     }
 
-    public Contact get(Long id) {
+    public Address get(Long id) {
         EntityManager em = null;
-        Contact contact = null;
+        Address address = null;
         try {
             em = EntityManagerConfig.getEmf().createEntityManager();
-            contact = em.find(Contact.class, id);
+            address = em.find(Address.class, id);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -45,16 +46,16 @@ public class DAOContact {
                 em.close();
             }
         }
-        return contact;
+        return address;
     }
 
-    public List<Contact> getAll() {
+    public List<Address> getAll() {
         EntityManager em = null;
-        List<Contact> contacts = null;
+        List<Address> addresses = null;
         try {
             em = EntityManagerConfig.getEmf().createEntityManager();
-            TypedQuery<Contact> query = em.createQuery("SELECT c FROM Contact c", Contact.class);
-            contacts = query.getResultList();
+            TypedQuery<Address> query = em.createQuery("SELECT a FROM Address a", Address.class);
+            addresses = query.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -62,23 +63,24 @@ public class DAOContact {
                 em.close();
             }
         }
-        return contacts;
+        return addresses;
     }
 
-    public boolean update(Contact updatedContact) {
+    public boolean update(Address address) {
         EntityManager em = null;
         boolean isUpdated = false;
         try {
             em = EntityManagerConfig.getEmf().createEntityManager();
             EntityTransaction et = em.getTransaction();
-    
-            Contact existingContact = em.find(Contact.class, updatedContact.getId());
-            if (existingContact != null) {
+
+            Address existingAddress = em.find(Address.class, address.getId());
+            if (existingAddress != null) {
                 et.begin();
-                existingContact.setFirstname(updatedContact.getFirstname());
-                existingContact.setLastname(updatedContact.getLastname());
-                existingContact.setEmail(updatedContact.getEmail());
-                em.merge(existingContact);
+                existingAddress.setStreet(address.getStreet());
+                existingAddress.setCity(address.getCity());
+                existingAddress.setZip(address.getZip());
+                existingAddress.setCountry(address.getCountry());
+                em.merge(existingAddress);
                 et.commit();
                 isUpdated = true;
             }
@@ -94,7 +96,6 @@ public class DAOContact {
         }
         return isUpdated;
     }
-    
 
     public boolean delete(Long id) {
         EntityManager em = null;
@@ -102,10 +103,10 @@ public class DAOContact {
         try {
             em = EntityManagerConfig.getEmf().createEntityManager();
             EntityTransaction et = em.getTransaction();
-            Contact contact = em.find(Contact.class, id);
-            if (contact != null) {
+            Address address = em.find(Address.class, id);
+            if (address != null) {
                 et.begin();
-                em.remove(contact);
+                em.remove(address);
                 et.commit();
                 isDeleted = true;
             }

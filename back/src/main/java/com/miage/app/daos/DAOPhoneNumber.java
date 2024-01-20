@@ -15,7 +15,7 @@ public class DAOPhoneNumber {
         super();
     }
 
-    public boolean addPhoneNumber(PhoneNumber phoneNumber) {
+    public boolean add(PhoneNumber phoneNumber) {
         boolean state = false;
         try {
             System.out.println("Contact: " + phoneNumber.getContact().getEmail());
@@ -34,7 +34,7 @@ public class DAOPhoneNumber {
         return state;
     }
 
-    public PhoneNumber getPhoneNumber(Long id) {
+    public PhoneNumber get(Long id) {
         EntityManager em = null;
         PhoneNumber phoneNumber = null;
         try {
@@ -50,7 +50,7 @@ public class DAOPhoneNumber {
         return phoneNumber;
     }
 
-    public List<PhoneNumber> getAllPhoneNumbers() {
+    public List<PhoneNumber> getAll() {
         EntityManager em = null;
         List<PhoneNumber> phones = null;
         try {
@@ -67,7 +67,7 @@ public class DAOPhoneNumber {
         return phones;
     }
 
-    public boolean updatePhone(Long id, PhoneNumber updatedPhoneNumber) {
+    public boolean update(Long id, PhoneNumber updatedPhoneNumber) {
         EntityManager em = null;
         try {
             em = EntityManagerConfig.getEmf().createEntityManager();
@@ -96,7 +96,7 @@ public class DAOPhoneNumber {
         }
     }
 
-    public boolean deletePhone(Long id) {
+    public boolean delete(Long id) {
         EntityManager em = null;
         try {
             em = EntityManagerConfig.getEmf().createEntityManager();
