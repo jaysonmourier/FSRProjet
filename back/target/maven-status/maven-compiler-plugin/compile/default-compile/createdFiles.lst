@@ -1,0 +1,12 @@
+com/miage/app/daos/DAOPhoneNumber.class
+com/miage/app/config/CorsFilter.class
+com/miage/app/dtos/PhoneNumberDTO.class
+com/miage/app/entities/Contact.class
+com/miage/app/dtos/ContactDTO.class
+com/miage/app/controllers/PhoneNumberController.class
+com/miage/app/services/ContactService.class
+com/miage/app/controllers/ContactController.class
+com/miage/app/config/EntityManagerConfig.class
+com/miage/app/daos/DAOContact.class
+com/miage/app/services/PhoneNumberService.class
+com/miage/app/entities/PhoneNumber.class
