@@ -3,59 +3,35 @@ package com.miage.app.services;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.miage.app.daos.DAOPhoneNumber;
-import com.miage.app.dtos.ContactDTO;
+import com.miage.app.config.EntityManagerConfig;
+import com.miage.app.daos.PhoneNumberDAO;
 import com.miage.app.dtos.PhoneNumberDTO;
-import com.miage.app.entities.Contact;
 import com.miage.app.entities.PhoneNumber;
+import com.miage.app.utils.DTOConverter;
 
 public class PhoneNumberService {
-    private final DAOPhoneNumber daoPhoneNumber;
+    private PhoneNumberDAO phoneNumberDAO = new PhoneNumberDAO(EntityManagerConfig.getEmf().createEntityManager());
 
-    public PhoneNumberService() {
-        this.daoPhoneNumber = new DAOPhoneNumber();
+    public List<PhoneNumberDTO> getAllPhoneNumbers() {
+        List<PhoneNumber> phoneNumbers = phoneNumberDAO.findAll();
+        return phoneNumbers.stream().map(DTOConverter::convertPhoneNumberToDTO).collect(Collectors.toList());
     }
 
-    public boolean addPhoneNumber(PhoneNumber phoneNumber) {
-        System.out.println("\n\n");
-        System.out.println("PHONE NUMBER SERVICE");
-        System.out.println(phoneNumber);
-        System.out.println("\n\n");
-        return daoPhoneNumber.add(phoneNumber);
+    public PhoneNumberDTO getPhoneNumber(Long id) {
+        PhoneNumber phoneNumber = phoneNumberDAO.find(id);
+        return phoneNumber != null ? DTOConverter.convertPhoneNumberToDTO(phoneNumber) : null;
     }
 
-    public Object getAllPhone() {
-        List<PhoneNumber> phones = daoPhoneNumber.getAll();
-        return phones.stream().map(this::convertToPhoneDTO).collect(Collectors.toList());
+    public PhoneNumberDTO addPhoneNumber(PhoneNumberDTO phoneNumberDTO) {
+        PhoneNumber phoneNumber = DTOConverter.convertPhoneNumberToEntity(phoneNumberDTO);
+        phoneNumberDAO.save(phoneNumber);
+        return DTOConverter.convertPhoneNumberToDTO(phoneNumber);
     }
 
-    public PhoneNumberDTO getPhone(Long id) {
-        PhoneNumber phone = daoPhoneNumber.get(id);
-        return phone == null ? null : convertToPhoneDTO(phone);
-    }
-
-    public PhoneNumberDTO convertToPhoneDTO(PhoneNumber phone) {
-        PhoneNumberDTO phoneDTO = new PhoneNumberDTO();
-        phoneDTO.setId(phone.getId());
-        phoneDTO.setPhoneKind(phone.getPhoneKind());
-        phoneDTO.setPhoneNumber(phone.getPhoneNumber());
-        phoneDTO.setContact(contactToContactDTO(phone.getContact()));
-        return phoneDTO;
-    }
-
-    public ContactDTO contactToContactDTO(Contact contact) {
-        ContactDTO contactDTO = new ContactDTO();
-        contactDTO.setId(contact.getId());
-        contactDTO.setFirstname(contact.getFirstname());
-        contactDTO.setLastname(contact.getLastname());
-        return contactDTO;
-    }
-
-    public boolean updatePhone(Long id, PhoneNumber phoneNumber) {
-        return daoPhoneNumber.update(id, phoneNumber);
-    }
-
-    public boolean deletePhone(Long id) {
-        return daoPhoneNumber.delete(id);
+    public void deletePhoneNumber(Long id) {
+        PhoneNumber phoneNumber = phoneNumberDAO.find(id);
+        if (phoneNumber != null) {
+            phoneNumberDAO.delete(phoneNumber);
+        }
     }
 }

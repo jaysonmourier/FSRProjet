@@ -16,10 +16,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           onPressed: () => context.go('/contacts'),
         ),
         IconButton(
-          icon: const Icon(Icons.person),
-          onPressed: () => context.go('/contact'),
-        ),
-        IconButton(
           icon: const Icon(Icons.group),
           onPressed: () => context.go('/groups'),
         ),

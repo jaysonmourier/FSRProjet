@@ -1,12 +1,9 @@
 package com.miage.app.controllers;
 
 import com.miage.app.dtos.ContactDTO;
-import com.miage.app.entities.Contact;
-import com.miage.app.entities.UserGroup;
 import com.miage.app.services.ContactService;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -20,66 +17,47 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/contacts")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class ContactController {
 
-    private final ContactService contactService;
+    private ContactService contactService = new ContactService();
 
-    public ContactController() {
-        this.contactService = new ContactService();
+    @GET
+    public List<ContactDTO> getAllContacts() {
+        return contactService.getAllContacts();
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response getAll() {
-        return Response.ok(contactService.getAllContacts()).build();
-    }
-
-    @GET @Path("/{id}")
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response get(@PathParam("id") Long id) {
+    @Path("/{id}")
+    public Response getContact(@PathParam("id") Long id) {
         ContactDTO contact = contactService.getContact(id);
-        if (contact == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity("Contact not found").build();
+        if (contact != null) {
+            return Response.ok(contact).build();
         }
-        return Response.ok(contact).build();
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
 
     @POST
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response add(Contact contactEntity) {
-        return Response.status(this.contactService.addContact(contactEntity) ? Response.Status.CREATED.getStatusCode() : Response.Status.BAD_REQUEST.getStatusCode()).build();
+    public Response addContact(ContactDTO contact) {
+        ContactDTO newContact = contactService.addContact(contact);
+        return Response.status(Response.Status.CREATED).entity(newContact).build();
     }
 
-    @PUT @Path("/{id}")
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response update(@PathParam("id") Long id, ContactDTO contactEntity) {
-        Contact contact = this.contactService.findById(id);
-        if(contact == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity("Contact not found").build();
+    @PUT
+    @Path("/{id}")
+    public Response updateContact(@PathParam("id") Long id, ContactDTO contact) {
+        ContactDTO updatedContact = contactService.updateContact(id, contact);
+        if (updatedContact != null) {
+            return Response.ok(updatedContact).build();
         }
-        
-        contact.setFirstname(contactEntity.getFirstname());
-        contact.setLastname(contactEntity.getLastname());
-        contact.setEmail(contactEntity.getEmail());
-        contact.setAddress(contactEntity.getAddress());
-
-        Set<UserGroup> groups = new HashSet<>();
-        for(Long groupId : contactEntity.getGroupIds()) {
-            UserGroup group = new UserGroup();
-            if(groupId != null) {
-                group.setId(id);
-            }
-        }
-        contact.setGroups(groups);
-
-        return Response.status(this.contactService.updateContact(id, contact) ? Response.Status.OK.getStatusCode() : Response.Status.BAD_REQUEST.getStatusCode()).build();
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
 
-    @DELETE @Path("/{id}")
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response delete(@PathParam("id") Long id) {
-        return Response.status(this.contactService.deleteContact(id) ? Response.Status.OK.getStatusCode() : Response.Status.BAD_REQUEST.getStatusCode()).build();
+    @DELETE
+    @Path("/{id}")
+    public Response deleteContact(@PathParam("id") Long id) {
+        contactService.deleteContact(id);
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 }

@@ -1,4 +1,4 @@
-// package com.miage.app.dtos;
+package com.miage.app.dtos;
 
 // public class AddressDTO {
 //     private String street;
@@ -31,3 +31,15 @@
 //         this.country = country;
 //     }
 // }
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter @Setter
+public class AddressDTO {
+    private Long id;
+    private String street;
+    private String city;
+    private String zip;
+    private String country;
+}

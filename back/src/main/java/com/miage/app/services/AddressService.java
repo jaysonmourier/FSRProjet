@@ -1,38 +1,37 @@
 package com.miage.app.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import com.miage.app.daos.DAOAddress;
+import com.miage.app.config.EntityManagerConfig;
+import com.miage.app.daos.AddressDAO;
+import com.miage.app.dtos.AddressDTO;
 import com.miage.app.entities.Address;
+import com.miage.app.utils.DTOConverter;
 
 public class AddressService {
-    private final DAOAddress daoAddress;
+    private AddressDAO addressDAO = new AddressDAO(EntityManagerConfig.getEmf().createEntityManager());
 
-    public AddressService() {
-        this.daoAddress = new DAOAddress();
+    public List<AddressDTO> getAllAddresses() {
+        List<Address> addresses = addressDAO.findAll();
+        return addresses.stream().map(DTOConverter::convertAddressToDTO).collect(Collectors.toList());
     }
 
-    public List<Address> getAll() {
-        return daoAddress.getAll();
+    public AddressDTO getAddress(Long id) {
+        Address address = addressDAO.find(id);
+        return address != null ? DTOConverter.convertAddressToDTO(address) : null;
     }
 
-    public Address get(Long id) {
-        return daoAddress.get(id);
+    public AddressDTO addAddress(AddressDTO addressDTO) {
+        Address address = DTOConverter.convertAddressToEntity(addressDTO);
+        addressDAO.save(address);
+        return DTOConverter.convertAddressToDTO(address);
     }
 
-    public boolean add(Address address) {
-        return daoAddress.add(address);
-    }
-
-    public boolean update(Long id, Address address) {
-        Address addressToUpdate = daoAddress.get(id);
-        if (addressToUpdate == null) {
-            return false;
+    public void deleteAddress(Long id) {
+        Address address = addressDAO.find(id);
+        if (address != null) {
+            addressDAO.delete(address);
         }
-        return daoAddress.update(address);
-    }
-
-    public boolean delete(Long id) {
-        return daoAddress.delete(id);
     }
 }

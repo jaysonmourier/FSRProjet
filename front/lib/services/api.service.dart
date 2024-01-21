@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:front/models/contact.model.dart';
 
@@ -41,6 +40,23 @@ class Api {
       return true;
     } else {
       return false;
+    }
+  }
+
+  Future<Contact?> getContact(int id) async {
+    var url = Uri.parse('$contacts/$id');
+    try {
+      var response = await http.get(url, headers: headers);
+      if (response.statusCode == 200) {
+        String decoded = utf8.decode(response.bodyBytes);
+        Map<String, dynamic> json = jsonDecode(decoded);
+        return Contact.fromJson(json);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Erreur lors de la récupération du contact: $e');
+      return null;
     }
   }
 }

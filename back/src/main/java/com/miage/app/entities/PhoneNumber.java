@@ -7,29 +7,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity(name="PhoneNumber")
-@Table(name="phone_numbers")
-@Getter @Setter @NoArgsConstructor
+@Entity
+@Getter @Setter
 public class PhoneNumber {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String phoneKind;
     private String phoneNumber;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="idContact")
+    @ManyToOne
+    @JoinColumn(name = "contact_id")
     private Contact contact;
-
-    public PhoneNumber(String phoneKind, String phoneNumber, Contact contact) {
-        this.phoneKind = phoneKind;
-        this.phoneNumber = phoneNumber;
-        this.contact = contact;
-    }
 }

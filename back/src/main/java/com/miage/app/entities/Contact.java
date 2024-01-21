@@ -15,39 +15,39 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity(name="Contact")
-@Table(name="contacts")
-@Getter @Setter @NoArgsConstructor
+@Entity
+@Getter @Setter
 public class Contact {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private String firstname;
     private String lastname;
     private String email;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contact", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contact")
     private Set<PhoneNumber> phoneNumbers = new HashSet<>();
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "idAddress")
+    @JoinColumn(name = "address_id")
     private Address address;
 
-    @ManyToMany(mappedBy = "contacts", fetch = FetchType.EAGER)
-    private Set<UserGroup> groups;
+    @ManyToMany(mappedBy = "contacts")
+    private Set<UserGroup> groups = new HashSet<>();
 
-    public Contact(String firstname, String lastname, String email, Set<PhoneNumber> phoneNumbers, Address address) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        this.phoneNumbers = phoneNumbers;
-        this.address = address;
+    @Override
+    public String toString() {
+
+        StringBuilder phoneNumbersToString = new StringBuilder();
+        for (PhoneNumber phoneNumber : phoneNumbers) {
+            phoneNumbersToString.append(phoneNumber.toString()).append(", ");
+        }
+        String concatenatedPhoneNumbers = phoneNumbersToString.toString();
+
+        return "Contact [address=" + address + ", email=" + email + ", firstname=" + firstname + ", groups=" + groups
+                + ", id=" + id + ", lastname=" + lastname + ", phoneNumbers=" + concatenatedPhoneNumbers + "]";
     }
 }

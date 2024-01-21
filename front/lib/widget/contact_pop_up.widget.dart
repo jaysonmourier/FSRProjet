@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:front/models/contact.model.dart';
 import 'package:front/utils/contact.utils.dart';
+import 'package:go_router/go_router.dart';
 
 class ContactPopUp extends StatelessWidget {
   final Contact contact;
@@ -51,7 +52,14 @@ class ContactPopUp extends StatelessWidget {
           )
                 ],
               )),
-      content: getPhoneNumbers(),
+      content: Column(
+        children: [
+           ElevatedButton(onPressed: () {
+            context.go('/contacts/edit:${contact.id}}');
+           }, child: Text("edit")),
+           getPhoneNumbers(),
+        ],
+      ),
     );
   }
 }
