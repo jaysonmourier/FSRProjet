@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:front/models/contact.model.dart';
+import 'package:front/models/contacts.provider.dart';
 import 'package:front/services/api.service.dart';
 import 'package:front/views/contacts.view.dart';
 import 'package:front/views/create_contact.view.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   final GoRouter router = GoRouter(
@@ -18,25 +20,33 @@ void main() {
         builder: (context, state) => CreateContactView(),
       ),
       GoRoute(
-        path: '/contacts/edit:id',
+        path: '/contacts/edit/:id',
         builder: (context, state) {
-          final id = state.pathParameters['id'];
+          final String? rawId = state.pathParameters['id']?.trim();
 
-          // Utilisation de FutureBuilder pour gérer l'opération asynchrone
+          if(rawId == null || rawId.isEmpty) {
+            return const ContactsView();
+          }
+
+          final int? id = int.tryParse(rawId);
+
+          if(id == null) {
+            return const ContactsView();
+          }
+          
           return FutureBuilder<Contact?>(
             future: Api()
-                .getContact(int.parse(id!)), // Appel asynchrone à getContact
+                .getContact(id),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator(); // Afficher un indicateur de chargement
+                return const CircularProgressIndicator();
               } else if (snapshot.hasError) {
                 return Text('Erreur: ${snapshot.error}');
               } else if (snapshot.hasData) {
                 return CreateContactView(
-                    contact: snapshot
-                        .data); // Création de la vue avec les données du contact
+                    contact: snapshot.data, editing: true,); 
               } else {
-                return Text('Aucun contact trouvé.');
+                return const Text('Aucun contact trouvé.');
               }
             },
           );
@@ -45,7 +55,10 @@ void main() {
     ],
   );
 
-  runApp(FSRApp(router: router));
+  runApp(ChangeNotifierProvider(
+    create: (context) => ContactsProvider(),
+    child: FSRApp(router: router),
+  ));
 }
 
 class FSRApp extends StatelessWidget {

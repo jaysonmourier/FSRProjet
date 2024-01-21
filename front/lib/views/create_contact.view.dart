@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:front/models/contact.model.dart';
 import 'package:front/models/phone.model.dart';
-import 'package:front/services/api.service.dart';
 import 'package:front/viewmodels/create.viewmodel.dart';
 
 class CreateContactView extends StatefulWidget {
-  Contact? contact;
-  CreateContactView({super.key, this.contact});
+  final Contact? contact;
+  final bool editing;
+  const CreateContactView({super.key, this.contact, this.editing = false});
 
   @override
   State<CreateContactView> createState() => _CreateContactViewState();
@@ -18,7 +18,7 @@ class _CreateContactViewState extends State<CreateContactView> {
   @override
   void initState() {
     super.initState();
-    viewModel = CreateContactViewModel(widget.contact);
+    viewModel = CreateContactViewModel(widget.contact, widget.editing);
   }
 
   void showSnackBar(String message, Color color) {
@@ -56,8 +56,7 @@ class _CreateContactViewState extends State<CreateContactView> {
               const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () {
-                  viewModel.save(showSnackBar);
-                  Api().addContact(viewModel.contact!);
+                  viewModel.save(context, showSnackBar);
                 },
                 child: const Text('Enregistrer le contact'),
               ),

@@ -14,7 +14,6 @@ class ContactTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Contact: $contact");
     return GestureDetector(
       onTap: () {
         showDialog(

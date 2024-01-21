@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front/models/contact.model.dart';
+import 'package:front/services/api.service.dart';
 import 'package:front/utils/contact.utils.dart';
 import 'package:front/viewmodels/contacts.viewmodel.dart';
 import 'package:front/widget/appbar/custom_app_bar.widget.dart';
@@ -21,10 +22,33 @@ class _ContactsViewState extends State<ContactsView> {
       return ContactUtils().noContactsFound();
     }
     return ListView.builder(
-        itemCount: contacts.length,
-        itemBuilder: (context, index) {
-          return ContactTile(contact: contacts[index]);
-        });
+      itemCount: contacts.length,
+      itemBuilder: (context, index) {
+        final contact = contacts[index];
+        return Dismissible(
+          key: Key(contact.id.toString()),
+          background: Container(
+            color: Colors.red,
+            alignment: Alignment.centerRight,
+            child: const Padding(
+              padding: EdgeInsets.only(right: 20.0),
+              child: Icon(Icons.delete, color: Colors.white),
+            ),
+          ),
+          direction: DismissDirection.endToStart,
+          onDismissed: (direction) async {
+            Api().deleteContact(contact.id!).then((value) {
+              if (value) {
+                setState(() {
+                  contacts.removeAt(index);
+                });
+              }
+            });
+          },
+          child: ContactTile(contact: contact),
+        );
+      },
+    );
   }
 
   @override

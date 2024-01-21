@@ -31,7 +31,9 @@ class ContactPopUp extends StatelessWidget {
       return const Text("No phone number");
     }
     return Column(
-      children: contact.phoneNumbers!.map((phone) => Text(phone.phoneNumber!)).toList(),
+      children: contact.phoneNumbers!
+          .map((phone) => Text(phone.phoneNumber!))
+          .toList(),
     );
   }
 
@@ -40,24 +42,43 @@ class ContactPopUp extends StatelessWidget {
     return AlertDialog(
       title: Center(
           child: Column(
-                children: [
+        children: [
           CircleAvatar(
             radius: 30,
             child: extractInitials(),
           ),
-          const SizedBox(height: 10,),
+          const SizedBox(
+            height: 10,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [Text(getFirstname(), style: const TextStyle(fontSize: 16),), const SizedBox(width: 5,),Text(getLastname(), style: const TextStyle(fontSize: 16),)],
+            children: [
+              Text(
+                getFirstname(),
+                style: const TextStyle(fontSize: 16),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              Text(
+                getLastname(),
+                style: const TextStyle(fontSize: 16),
+              )
+            ],
           )
-                ],
-              )),
+        ],
+      )),
       content: Column(
         children: [
-           ElevatedButton(onPressed: () {
-            context.go('/contacts/edit:${contact.id}}');
-           }, child: Text("edit")),
-           getPhoneNumbers(),
+          ElevatedButton(
+              onPressed: () async {
+                context.push('/contacts/edit/${contact.id}').then((value) {
+                  context.pop();
+                  context.go('/contacts');
+                });
+              },
+              child: const Text("edit")),
+          getPhoneNumbers(),
         ],
       ),
     );

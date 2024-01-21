@@ -3,8 +3,10 @@ import 'package:front/models/address.model.dart';
 import 'package:front/models/contact.model.dart';
 import 'package:front/models/phone.model.dart';
 import 'package:front/services/api.service.dart';
+import 'package:go_router/go_router.dart';
 
 class CreateContactViewModel {
+  bool editing;
   final Api api = Api();
   final TextEditingController firstnameController = TextEditingController();
   final TextEditingController lastnameController = TextEditingController();
@@ -21,8 +23,8 @@ class CreateContactViewModel {
   final TextEditingController addressCountryController =
       TextEditingController();
 
-  CreateContactViewModel(Contact? contact) {
-    if(contact != null) {
+  CreateContactViewModel(Contact? contact, this.editing) {
+    if (contact != null) {
       this.contact = contact;
       firstnameController.text = contact.firstname ?? "";
       lastnameController.text = contact.lastname ?? "";
@@ -37,7 +39,7 @@ class CreateContactViewModel {
         phoneNumberControllers[phone]?.text = phone.phoneNumber ?? "";
       }
     } else {
-    addPhone(Phone());
+      addPhone(Phone());
     }
   }
 
@@ -117,7 +119,7 @@ class CreateContactViewModel {
       addressZipCode.isNotEmpty ||
       addressCountry.isNotEmpty;
 
-  void save(Function(String, Color) onError) {
+  void save(BuildContext context, Function(String, Color) onError) {
     if (firstname.isEmpty || lastname.isEmpty || email.isEmpty) {
       onError.call("Veuillez remplir tous les champs", Colors.red);
       return;
@@ -153,12 +155,13 @@ class CreateContactViewModel {
       return;
     }
 
-    if(!hasAddress) {
+    if (!hasAddress) {
       onError.call("Veuillez saisir une adresse", Colors.red);
       return;
     }
 
     contact = Contact(
+      id: contact?.id,
       firstname: firstname,
       lastname: lastname,
       email: email,
@@ -170,5 +173,25 @@ class CreateContactViewModel {
         country: addressCountry,
       ),
     );
+
+    if (editing) {
+      api.updateContact(contact!).then((value) {
+        if (value) {
+          onError.call("Contact mis à jour", Colors.green);
+          context.go('/contacts');
+        } else {
+          onError.call("Erreur lors de la mise à jour du contact", Colors.red);
+        }
+      });
+    } else {
+      api.addContact(contact!).then((value) {
+        if (value) {
+          onError.call("Contact ajouté", Colors.green);
+          context.go('/contacts');
+        } else {
+          onError.call("Erreur lors de l'ajout du contact", Colors.red);
+        }
+      });
+    }
   }
 }

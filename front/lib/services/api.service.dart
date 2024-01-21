@@ -59,4 +59,28 @@ class Api {
       return null;
     }
   }
+
+  Future<bool> deleteContact(int i) async {
+    var url = Uri.parse('$contacts/$i');
+    var r = await http.delete(url, headers: headers);
+    if (r.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> updateContact(Contact contact) async {
+    var url = Uri.parse('$contacts/${contact.id}');
+    print("url: $url");
+    print("updateContact: ${contact.toJson()}");
+    var r = await http.put(url,
+        headers: headers, body: jsonEncode(contact.toJson()));
+    print("updateContact: ${r.statusCode}");
+    if (r.statusCode == 200) {
+      return Future.value(true);
+    } else {
+      return Future.value(false);
+    }
+  }
 }
