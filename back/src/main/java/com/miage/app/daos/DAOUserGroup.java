@@ -7,37 +7,39 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 
 import com.miage.app.config.EntityManagerConfig;
-import com.miage.app.entities.Contact;
+import com.miage.app.entities.UserGroup;
 
-public class DAOContact {
-    public DAOContact() {
+public class DAOUserGroup {
+    public DAOUserGroup() {
         super();
     }
 
-    public boolean add(Contact contact) {
+    public boolean add(UserGroup group) {
         boolean state = false;
+        EntityManager em = null;
         try {
-            Contact newContact = new Contact(contact.getFirstname(), contact.getLastname(), contact.getEmail(), contact.getPhoneNumbers(), contact.getAddress());
-
-            EntityManager em = EntityManagerConfig.getEmf().createEntityManager();
+            em = EntityManagerConfig.getEmf().createEntityManager();
             EntityTransaction et = em.getTransaction();
             et.begin();
-            em.persist(newContact);
+            em.persist(group);
             et.commit();
-            em.close();
             state = true;
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
         }
         return state;
     }
 
-    public Contact get(Long id) {
+    public UserGroup get(Long id) {
         EntityManager em = null;
-        Contact contact = null;
+        UserGroup group = null;
         try {
             em = EntityManagerConfig.getEmf().createEntityManager();
-            contact = em.find(Contact.class, id);
+            group = em.find(UserGroup.class, id);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -45,16 +47,16 @@ public class DAOContact {
                 em.close();
             }
         }
-        return contact;
+        return group;
     }
 
-    public List<Contact> getAll() {
+    public List<UserGroup> getAll() {
         EntityManager em = null;
-        List<Contact> contacts = null;
+        List<UserGroup> groups = null;
         try {
             em = EntityManagerConfig.getEmf().createEntityManager();
-            TypedQuery<Contact> query = em.createQuery("SELECT c FROM Contact c", Contact.class);
-            contacts = query.getResultList();
+            TypedQuery<UserGroup> query = em.createQuery("SELECT g FROM UserGroup g", UserGroup.class);
+            groups = query.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -62,25 +64,22 @@ public class DAOContact {
                 em.close();
             }
         }
-        return contacts;
+        return groups;
     }
 
-    public boolean update(Contact updatedContact) {
+    public boolean update(UserGroup updatedGroup) {
         EntityManager em = null;
         boolean isUpdated = false;
         try {
             em = EntityManagerConfig.getEmf().createEntityManager();
             EntityTransaction et = em.getTransaction();
-    
-            Contact existingContact = em.find(Contact.class, updatedContact.getId());
-            if (existingContact != null) {
+
+            UserGroup existingGroup = em.find(UserGroup.class, updatedGroup.getId());
+            if (existingGroup != null) {
                 et.begin();
-                existingContact.setFirstname(updatedContact.getFirstname());
-                existingContact.setLastname(updatedContact.getLastname());
-                existingContact.setEmail(updatedContact.getEmail());
-                existingContact.setPhoneNumbers(updatedContact.getPhoneNumbers());
-                existingContact.setAddress(updatedContact.getAddress());
-                em.merge(existingContact);
+                existingGroup.setName(updatedGroup.getName());
+                existingGroup.setContacts(updatedGroup.getContacts());
+                em.merge(existingGroup);
                 et.commit();
                 isUpdated = true;
             }
@@ -96,7 +95,6 @@ public class DAOContact {
         }
         return isUpdated;
     }
-    
 
     public boolean delete(Long id) {
         EntityManager em = null;
@@ -104,10 +102,10 @@ public class DAOContact {
         try {
             em = EntityManagerConfig.getEmf().createEntityManager();
             EntityTransaction et = em.getTransaction();
-            Contact contact = em.find(Contact.class, id);
-            if (contact != null) {
+            UserGroup group = em.find(UserGroup.class, id);
+            if (group != null) {
                 et.begin();
-                em.remove(contact);
+                em.remove(group);
                 et.commit();
                 isDeleted = true;
             }

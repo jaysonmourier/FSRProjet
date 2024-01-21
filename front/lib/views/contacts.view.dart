@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:front/models/contact.model.dart';
 import 'package:front/utils/contact.utils.dart';
 import 'package:front/viewmodels/contacts.viewmodel.dart';
+import 'package:front/widget/appbar/custom_app_bar.widget.dart';
 import 'package:front/widget/contact_tile.widget.dart';
 
 class ContactsView extends StatefulWidget {
@@ -25,10 +26,13 @@ class _ContactsViewState extends State<ContactsView> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-            future: viewModel.getAllContacts(),
-            builder: (context, snapshot) {
-              return viewModel.buildWidget(snapshot, buildContactList(viewModel.getContactsList()), const Center(child: CircularProgressIndicator()));
-            });
+    return Scaffold(
+      appBar: const CustomAppBar(title: 'Mes contacts'),
+      body: FutureBuilder(
+              future: viewModel.getAllContacts(),
+              builder: (context, snapshot) {
+                return viewModel.buildWidget(snapshot, buildContactList(viewModel.getContactsList()), const Center(child: CircularProgressIndicator()));
+              }),
+    );
   }
 }

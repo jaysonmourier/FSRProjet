@@ -7,6 +7,7 @@ import com.miage.app.daos.DAOContact;
 import com.miage.app.dtos.ContactDTO;
 import com.miage.app.dtos.PhoneNumberDTO;
 import com.miage.app.entities.Contact;
+import com.miage.app.entities.UserGroup;
 import com.miage.app.entities.PhoneNumber;
 
 public class ContactService {
@@ -25,6 +26,10 @@ public class ContactService {
         return contact == null ? null : convertToContactDTO(contact);
     }
 
+    public Contact findById(Long id) {
+        return daoContact.get(id);
+    }
+
     public List<ContactDTO> getAllContacts() {
         List<Contact> contacts = daoContact.getAll();
         return contacts.stream().map(this::convertToContactDTO).collect(Collectors.toList());
@@ -36,8 +41,10 @@ public class ContactService {
         contactDTO.setFirstname(contact.getFirstname());
         contactDTO.setLastname(contact.getLastname());
         contactDTO.setEmail(contact.getEmail());
+        contactDTO.setAddress(contact.getAddress());
         contactDTO.setPhoneNumbers(
                 contact.getPhoneNumbers().stream().map(this::phoneNumberToPhoneNumberDTO).collect(Collectors.toList()));
+        contactDTO.setGroupIds(contact.getGroups().stream().map(UserGroup::getId).collect(Collectors.toList()));
         return contactDTO;
     }
 
@@ -49,11 +56,16 @@ public class ContactService {
         return phoneNumberDTO;
     }
 
+    // public AddressDTO addressToAddressDTO(Address address) {
+    //     AddressDTO addressDTO = new AddressDTO();
+    //     addressDTO.setCity(address.getCity());
+    //     addressDTO.setCountry(address.getCountry());
+    //     addressDTO.setStreet(address.getStreet());
+    //     addressDTO.setZip(address.getZip());
+    //     return addressDTO;
+    // }
+
     public boolean updateContact(Long id, Contact contact) {
-        Contact contactToUpdate = daoContact.get(id);
-        if (contactToUpdate == null) {
-            return false;
-        }
         return daoContact.update(contact);
     }
 

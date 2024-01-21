@@ -2,7 +2,11 @@ package com.miage.app.controllers;
 
 import com.miage.app.dtos.ContactDTO;
 import com.miage.app.entities.Contact;
+import com.miage.app.entities.UserGroup;
 import com.miage.app.services.ContactService;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -50,8 +54,27 @@ public class ContactController {
     @PUT @Path("/{id}")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public Response update(@PathParam("id") Long id, Contact contactEntity) {
-        return Response.status(this.contactService.updateContact(id, contactEntity) ? Response.Status.OK.getStatusCode() : Response.Status.BAD_REQUEST.getStatusCode()).build();
+    public Response update(@PathParam("id") Long id, ContactDTO contactEntity) {
+        Contact contact = this.contactService.findById(id);
+        if(contact == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity("Contact not found").build();
+        }
+        
+        contact.setFirstname(contactEntity.getFirstname());
+        contact.setLastname(contactEntity.getLastname());
+        contact.setEmail(contactEntity.getEmail());
+        contact.setAddress(contactEntity.getAddress());
+
+        Set<UserGroup> groups = new HashSet<>();
+        for(Long groupId : contactEntity.getGroupIds()) {
+            UserGroup group = new UserGroup();
+            if(groupId != null) {
+                group.setId(id);
+            }
+        }
+        contact.setGroups(groups);
+
+        return Response.status(this.contactService.updateContact(id, contact) ? Response.Status.OK.getStatusCode() : Response.Status.BAD_REQUEST.getStatusCode()).build();
     }
 
     @DELETE @Path("/{id}")

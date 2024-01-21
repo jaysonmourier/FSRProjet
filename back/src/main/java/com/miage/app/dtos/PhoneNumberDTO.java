@@ -1,7 +1,5 @@
 package com.miage.app.dtos;
 
-import com.miage.app.entities.Contact;
-
 public class PhoneNumberDTO {
     private long id;
     private String phoneKind;

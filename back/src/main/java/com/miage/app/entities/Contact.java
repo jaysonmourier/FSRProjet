@@ -1,7 +1,9 @@
 package com.miage.app.entities;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,8 +12,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -31,15 +34,20 @@ public class Contact {
     private String email;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "contact", fetch = FetchType.EAGER)
-    private List<PhoneNumber> phoneNumbers = new ArrayList<>();
+    private Set<PhoneNumber> phoneNumbers = new HashSet<>();
 
-    // @ManyToOne
-    // @JoinColumn(name = "address_id")
-    // private Address address;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "idAddress")
+    private Address address;
 
-    public Contact(String firstname, String lastname, String email) {
+    @ManyToMany(mappedBy = "contacts", fetch = FetchType.EAGER)
+    private Set<UserGroup> groups;
+
+    public Contact(String firstname, String lastname, String email, Set<PhoneNumber> phoneNumbers, Address address) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
+        this.phoneNumbers = phoneNumbers;
+        this.address = address;
     }
 }

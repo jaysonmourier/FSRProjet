@@ -39,7 +39,7 @@ class ContactPopUp extends StatelessWidget {
     return AlertDialog(
       title: Center(
           child: Column(
-        children: [
+                children: [
           CircleAvatar(
             radius: 30,
             child: extractInitials(),
@@ -49,8 +49,8 @@ class ContactPopUp extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [Text(getFirstname(), style: const TextStyle(fontSize: 16),), const SizedBox(width: 5,),Text(getLastname(), style: const TextStyle(fontSize: 16),)],
           )
-        ],
-      )),
+                ],
+              )),
       content: getPhoneNumbers(),
     );
   }
