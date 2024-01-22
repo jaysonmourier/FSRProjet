@@ -9,6 +9,7 @@ import com.miage.app.config.EntityManagerConfig;
 import com.miage.app.daos.ContactDAO;
 import com.miage.app.dtos.AddressDTO;
 import com.miage.app.dtos.ContactDTO;
+import com.miage.app.dtos.ContactShortDTO;
 import com.miage.app.dtos.PhoneNumberDTO;
 import com.miage.app.dtos.UserGroupDTO;
 import com.miage.app.entities.Address;
@@ -25,16 +26,18 @@ public class ContactService {
         return contacts.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
+    public Contact find(Long id) {
+        return contactDAO.find(id);
+    }
+
     public ContactDTO getContact(Long id) {
         Contact contact = contactDAO.find(id);
         return contact != null ? convertToDTO(contact) : null;
     }
 
-    public ContactDTO addContact(ContactDTO contactDTO) {
-        System.out.println("ContactDTO: " + contactDTO);
-        Contact contact = DTOConverter.convertToEntity(contactDTO);
+    public Contact addContact(Contact contact) {
         contactDAO.save(contact);
-        return convertToDTO(contact);
+        return contact;
     }
 
     public ContactDTO updateContact(Long id, ContactDTO contactDTO) {
@@ -73,18 +76,14 @@ public class ContactService {
 
         if (contact.getPhoneNumbers() != null) {
             Set<PhoneNumberDTO> phoneNumberDTOs = contact.getPhoneNumbers().stream()
-                    .map(DTOConverter::convertPhoneNumberToDTO) // Tu auras besoin d'une méthode pour convertir
-                                                                // PhoneNumber en
-                    // PhoneNumberDTO.
+                    .map(DTOConverter::convertPhoneNumberToDTO)
                     .collect(Collectors.toSet());
             contactDTO.setPhoneNumbers(phoneNumberDTOs);
         }
 
         if (contact.getGroups() != null) {
             Set<UserGroupDTO> userGroupDTOs = contact.getGroups().stream()
-                    .map(DTOConverter::convertUserGroupToDTO) // Tu auras besoin d'une méthode pour convertir UserGroup
-                                                              // en
-                    // UserGroupDTO.
+                    .map(DTOConverter::convertUserGroupToDTO)
                     .collect(Collectors.toSet());
             contactDTO.setGroups(userGroupDTOs);
         }

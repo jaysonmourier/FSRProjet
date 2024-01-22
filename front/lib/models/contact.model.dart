@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:front/models/address.model.dart';
 import 'package:front/models/phone.model.dart';
 
@@ -12,6 +14,7 @@ class Contact {
   Contact({this.id, this.firstname, this.lastname, this.email, this.address, this.phoneNumbers});
 
   Contact.fromJson(Map<String, dynamic> json) {
+    print(json);
     id = json['id'];
     firstname = json['firstname'];
     lastname = json['lastname'];

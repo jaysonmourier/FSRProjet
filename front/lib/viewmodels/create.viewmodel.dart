@@ -134,6 +134,7 @@ class CreateContactViewModel {
 
     for (var phone in phoneKindControllers.keys) {
       phones.add(Phone(
+        id: phone.id,
         phoneKind: phoneKindControllers[phone]?.text,
         phoneNumber: phoneNumberControllers[phone]?.text,
       ));
@@ -167,6 +168,7 @@ class CreateContactViewModel {
       email: email,
       phoneNumbers: phones,
       address: Address(
+        id: contact?.address?.id,
         street: addressStreet,
         city: addressCity,
         zip: addressZipCode,
@@ -178,7 +180,7 @@ class CreateContactViewModel {
       api.updateContact(contact!).then((value) {
         if (value) {
           onError.call("Contact mis à jour", Colors.green);
-          context.go('/contacts');
+          context.replace('/contacts');
         } else {
           onError.call("Erreur lors de la mise à jour du contact", Colors.red);
         }
@@ -187,7 +189,7 @@ class CreateContactViewModel {
       api.addContact(contact!).then((value) {
         if (value) {
           onError.call("Contact ajouté", Colors.green);
-          context.go('/contacts');
+          context.replace('/contacts');
         } else {
           onError.call("Erreur lors de l'ajout du contact", Colors.red);
         }

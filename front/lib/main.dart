@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:front/models/contact.model.dart';
-import 'package:front/models/contacts.provider.dart';
 import 'package:front/services/api.service.dart';
 import 'package:front/views/contacts.view.dart';
 import 'package:front/views/create_contact.view.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
 void main() {
   final GoRouter router = GoRouter(
@@ -13,30 +11,29 @@ void main() {
     routes: [
       GoRoute(
         path: '/contacts',
-        builder: (context, state) => const ContactsView(),
+        builder: (context, state) => ContactsView(),
       ),
       GoRoute(
         path: '/contacts/create',
-        builder: (context, state) => CreateContactView(),
+        builder: (context, state) => const CreateContactView(),
       ),
       GoRoute(
         path: '/contacts/edit/:id',
         builder: (context, state) {
           final String? rawId = state.pathParameters['id']?.trim();
 
-          if(rawId == null || rawId.isEmpty) {
-            return const ContactsView();
+          if (rawId == null || rawId.isEmpty) {
+            return ContactsView();
           }
 
           final int? id = int.tryParse(rawId);
 
-          if(id == null) {
-            return const ContactsView();
+          if (id == null) {
+            return ContactsView();
           }
-          
+
           return FutureBuilder<Contact?>(
-            future: Api()
-                .getContact(id),
+            future: Api().getContact(id),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const CircularProgressIndicator();
@@ -44,7 +41,9 @@ void main() {
                 return Text('Erreur: ${snapshot.error}');
               } else if (snapshot.hasData) {
                 return CreateContactView(
-                    contact: snapshot.data, editing: true,); 
+                  contact: snapshot.data,
+                  editing: true,
+                );
               } else {
                 return const Text('Aucun contact trouvé.');
               }
@@ -55,9 +54,8 @@ void main() {
     ],
   );
 
-  runApp(ChangeNotifierProvider(
-    create: (context) => ContactsProvider(),
-    child: FSRApp(router: router),
+  runApp(FSRApp(
+    router: router,
   ));
 }
 

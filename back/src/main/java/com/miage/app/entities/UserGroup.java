@@ -49,4 +49,9 @@ public class UserGroup {
         inverseJoinColumns = @JoinColumn(name = "contact_id")
     )
     private Set<Contact> contacts = new HashSet<>();
+
+    public void addContact(Contact contact) {
+        contacts.add(contact);
+        contact.getGroups().add(this);
+    }
 }

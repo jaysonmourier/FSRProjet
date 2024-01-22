@@ -1,7 +1,10 @@
 package com.miage.app.controllers;
 
 import com.miage.app.dtos.ContactDTO;
+import com.miage.app.dtos.ContactShortDTO;
+import com.miage.app.entities.Contact;
 import com.miage.app.services.ContactService;
+import com.miage.app.utils.DTOConverter;
 
 import java.util.List;
 
@@ -24,13 +27,13 @@ public class ContactController {
     private ContactService contactService = new ContactService();
 
     @GET
-    public List<ContactDTO> getAllContacts() {
+    public List<ContactDTO> getAll() {
         return contactService.getAllContacts();
     }
 
     @GET
     @Path("/{id}")
-    public Response getContact(@PathParam("id") Long id) {
+    public Response get(@PathParam("id") Long id) {
         ContactDTO contact = contactService.getContact(id);
         if (contact != null) {
             return Response.ok(contact).build();
@@ -39,14 +42,14 @@ public class ContactController {
     }
 
     @POST
-    public Response addContact(ContactDTO contact) {
-        ContactDTO newContact = contactService.addContact(contact);
+    public Response add(Contact contact) {
+        Contact newContact = contactService.addContact(contact);
         return Response.status(Response.Status.CREATED).entity(newContact).build();
     }
 
     @PUT
     @Path("/{id}")
-    public Response updateContact(@PathParam("id") Long id, ContactDTO contact) {
+    public Response update(@PathParam("id") Long id, ContactDTO contact) {
         ContactDTO updatedContact = contactService.updateContact(id, contact);
         if (updatedContact != null) {
             return Response.ok(updatedContact).build();
@@ -56,7 +59,7 @@ public class ContactController {
 
     @DELETE
     @Path("/{id}")
-    public Response deleteContact(@PathParam("id") Long id) {
+    public Response delete(@PathParam("id") Long id) {
         contactService.deleteContact(id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }

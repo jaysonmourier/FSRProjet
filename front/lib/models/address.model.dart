@@ -1,12 +1,14 @@
 class Address {
+  int? id;
   String? street;
   String? city;
   String? country;
   String? zip;
 
-  Address({this.street, this.city, this.country, this.zip});
+  Address({this.id, this.street, this.city, this.country, this.zip});
 
   Address.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     street = json['street'];
     city = json['city'];
     country = json['country'];
@@ -16,6 +18,7 @@ class Address {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
 
+    data['id'] = id;
     data['street'] = street;
     data['city'] = city;
     data['country'] = country;
@@ -26,6 +29,6 @@ class Address {
 
   @override
   String toString() {
-    return 'Address{street: $street, city: $city, country: $country, zip: $zip}';
+    return 'Address{id: $id, street: $street, city: $city, country: $country, zip: $zip}';
   }
 }

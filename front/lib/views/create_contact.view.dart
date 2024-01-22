@@ -50,7 +50,7 @@ class _CreateContactViewState extends State<CreateContactView> {
               const SizedBox(height: 10),
               buildPhoneList(),
               const SizedBox(height: 30),
-              const Text("Addresse", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+              const Text("Adresse", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
               const SizedBox(height: 10),
               buildAddressForm(),
               const SizedBox(height: 30),

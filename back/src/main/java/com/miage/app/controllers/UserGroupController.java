@@ -12,7 +12,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
+import com.miage.app.dtos.ContactDTO;
+import com.miage.app.dtos.ContactShortDTO;
 import com.miage.app.dtos.UserGroupDTO;
+import com.miage.app.dtos.UserGroupShortDTO;
+import com.miage.app.entities.Contact;
 import com.miage.app.services.UserGroupService;
 import javax.ws.rs.core.MediaType;
 
@@ -24,13 +28,13 @@ public class UserGroupController {
     private UserGroupService userGroupService = new UserGroupService();
 
     @GET
-    public List<UserGroupDTO> getAllUserGroups() {
+    public List<UserGroupShortDTO> getAll() {
         return userGroupService.getAllUserGroups();
     }
 
     @GET
     @Path("/{groupId}")
-    public Response getUserGroup(@PathParam("groupId") Long groupId) {
+    public Response get(@PathParam("groupId") Long groupId) {
         UserGroupDTO group = userGroupService.getUserGroup(groupId);
         if (group != null) {
             return Response.ok(group).build();
@@ -39,17 +43,24 @@ public class UserGroupController {
     }
 
     @POST
-    public Response addUserGroup(UserGroupDTO group) {
+    public Response add(UserGroupDTO group) {
         UserGroupDTO newGroup = userGroupService.addUserGroup(group);
         return Response.status(Response.Status.CREATED).entity(newGroup).build();
     }
 
-    @PUT
-    @Path("/{groupId}")
-    public Response updateUserGroup(@PathParam("groupId") Long groupId, UserGroupDTO group) {
-        UserGroupDTO updatedGroup = userGroupService.updateUserGroup(groupId, group);
-        if (updatedGroup != null) {
-            return Response.ok(updatedGroup).build();
+    @POST
+    @Path("/{groupId}/add")
+    public Response addContact(@PathParam("groupId") Long groupId, List<Contact> contacts) {
+        UserGroupDTO newGroup = userGroupService.addContactsToGroup(groupId, contacts);
+        return Response.status(Response.Status.CREATED).entity(newGroup).build();
+    }
+
+    @GET
+    @Path("/{groupId}/get")
+    public Response getContactsInGroup(@PathParam("groupId") Long groupId) {
+        List<ContactShortDTO> contacts = userGroupService.getContactsInGroup(groupId);
+        if (contacts != null) {
+            return Response.ok(contacts).build();
         }
         return Response.status(Response.Status.NOT_FOUND).build();
     }
