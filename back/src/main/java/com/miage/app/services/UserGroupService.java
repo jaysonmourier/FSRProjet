@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 
 import com.miage.app.config.EntityManagerConfig;
 import com.miage.app.daos.UserGroupDAO;
-import com.miage.app.dtos.ContactDTO;
 import com.miage.app.dtos.ContactShortDTO;
 import com.miage.app.dtos.UserGroupDTO;
 import com.miage.app.dtos.UserGroupShortDTO;

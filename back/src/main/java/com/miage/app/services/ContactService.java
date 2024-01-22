@@ -9,7 +9,6 @@ import com.miage.app.config.EntityManagerConfig;
 import com.miage.app.daos.ContactDAO;
 import com.miage.app.dtos.AddressDTO;
 import com.miage.app.dtos.ContactDTO;
-import com.miage.app.dtos.ContactShortDTO;
 import com.miage.app.dtos.PhoneNumberDTO;
 import com.miage.app.dtos.UserGroupDTO;
 import com.miage.app.entities.Address;

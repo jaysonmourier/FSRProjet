@@ -1,10 +1,8 @@
 package com.miage.app.controllers;
 
 import com.miage.app.dtos.ContactDTO;
-import com.miage.app.dtos.ContactShortDTO;
 import com.miage.app.entities.Contact;
 import com.miage.app.services.ContactService;
-import com.miage.app.utils.DTOConverter;
 
 import java.util.List;
 
