@@ -11,13 +11,15 @@ class Group {
     length = json['length'];
   }
 
+  String? get groupName => name;
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
 
     if(id != null) data['groupId'] = id;
     if(name != null) data['groupName'] = name;
     if(length != null) data['length'] = length;
-    
+
     return data;
   }
 
