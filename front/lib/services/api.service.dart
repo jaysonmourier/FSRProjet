@@ -66,7 +66,7 @@ class Api {
   Future<bool> deleteContact(int i) async {
     var url = Uri.parse('$contacts/$i');
     var r = await http.delete(url, headers: headers);
-    if (r.statusCode == 200) {
+    if (r.statusCode == 204) {
       return true;
     } else {
       return false;

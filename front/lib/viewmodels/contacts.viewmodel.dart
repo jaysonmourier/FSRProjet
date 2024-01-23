@@ -1,27 +1,43 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:front/models/contact.model.dart';
 import 'package:front/services/api.service.dart';
 
-class ContactsViewModel {
+class ContactsViewModel with ChangeNotifier {
   final Api api = Api();
-  List<Contact>? contacts;
+  List<Contact> _contacts = [];
 
-  List<Contact>? getContactsList() {
-    contacts?.sort((a, b) => a.firstname!.compareTo(b.firstname!));
-    return contacts;
-  }
+  List<Contact> get contacts => _contacts;
 
-  Future<List<Contact>?> getAllContacts() async {
-    contacts = await api.getAllContacts();
-    return contacts;
-  }
-
-  Widget buildWidget(AsyncSnapshot<List<Contact>?> snapshot,
-      Widget hasDataWidget, Widget noDataWidget) {
-    if (snapshot.hasData) {
-      return hasDataWidget;
-    } else {
-      return noDataWidget;
+  void fetchContacts() async {
+    try {
+      var contacts = await api.getAllContacts();
+      contacts?.sort((a, b) => a.firstname!.compareTo(b.firstname!));
+      _contacts = contacts!;
+      notifyListeners();
+    } catch (e) {
+      // Gérer l'erreur
     }
+  }
+
+  Future<bool> deleteContact(int id) async {
+    try {
+      final success = await api.deleteContact(id);
+      if (success) {
+        _contacts.removeWhere((contact) => contact.id == id);
+        notifyListeners();
+      }
+      return success;
+    } catch (e) {
+      // Gérer l'erreur
+      return false;
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    // Fermer d'autres ressources si nécessaire
   }
 }
