@@ -186,6 +186,7 @@ class CreateContactViewModel {
         }
       });
     } else {
+      print("add contact ${contact!.toJson()}");
       api.addContact(contact!).then((value) {
         if (value) {
           onError.call("Contact ajouté", Colors.green);

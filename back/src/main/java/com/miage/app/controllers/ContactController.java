@@ -41,6 +41,7 @@ public class ContactController {
 
     @POST
     public Response add(Contact contact) {
+        System.out.println("[ADD] " + contact);
         Contact newContact = contactService.addContact(contact);
         return Response.status(Response.Status.CREATED).entity(newContact).build();
     }
