@@ -62,4 +62,11 @@ public class ContactController {
         contactService.deleteContact(id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
+
+    @DELETE
+    @Path("{id}/phone/{pid}")
+    public Response deletePhone(@PathParam("id") Long id, @PathParam("pid") Long pid){
+        contactService.deletePhone(id, pid);
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
 }

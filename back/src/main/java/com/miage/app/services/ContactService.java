@@ -21,16 +21,16 @@ public class ContactService {
     private ContactDAO contactDAO = new ContactDAO(EntityManagerConfig.getEmf().createEntityManager());
 
     public List<ContactDTO> getAllContacts() {
-        List<Contact> contacts = contactDAO.findAll();
+        List<Contact> contacts = contactDAO.getAll();
         return contacts.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
     public Contact find(Long id) {
-        return contactDAO.find(id);
+        return contactDAO.get(id);
     }
 
     public ContactDTO getContact(Long id) {
-        Contact contact = contactDAO.find(id);
+        Contact contact = contactDAO.get(id);
         return contact != null ? convertToDTO(contact) : null;
     }
 
@@ -40,18 +40,18 @@ public class ContactService {
     }
 
     public ContactDTO updateContact(Long id, ContactDTO contactDTO) {
-        Contact contact = contactDAO.find(id);
+        Contact contact = contactDAO.get(id);
         System.out.println("Contact: " + contact);
         if (contact != null) {
             updateEntityWithDTO(contact, contactDTO);
-            contactDAO.save(contact);
+            contactDAO.update(contact);
             return convertToDTO(contact);
         }
         return null;
     }
 
     public void deleteContact(Long id) {
-        Contact contact = contactDAO.find(id);
+        Contact contact = contactDAO.get(id);
         if (contact != null) {
             contactDAO.delete(contact);
         }
@@ -137,5 +137,9 @@ public class ContactService {
         }
 
         contact.setPhoneNumbers(updatedPhoneNumbers);
+    }
+
+    public boolean deletePhone(Long id,  Long pid) {
+       return contactDAO.deletePhoneNumber(id, pid);
     }
 }

@@ -13,6 +13,7 @@ class CreateContactViewModel {
   final TextEditingController emailController = TextEditingController();
   Contact? contact;
   List<Phone> phones = [];
+  List<Phone> phonesToDelete = [];
   Map<Phone, TextEditingController> phoneKindControllers = {};
   Map<Phone, TextEditingController> phoneNumberControllers = {};
   Address? address;
@@ -50,6 +51,9 @@ class CreateContactViewModel {
   }
 
   void removePhone(Phone phone) {
+    if (phone.id != null) {
+      phonesToDelete.add(phone);
+    }
     phones.remove(phone);
     phoneKindControllers[phone]?.dispose();
     phoneNumberControllers[phone]?.dispose();
@@ -177,7 +181,7 @@ class CreateContactViewModel {
     );
 
     if (editing) {
-      api.updateContact(contact!).then((value) {
+      api.updateContact(contact!, phonesToDelete).then((value) {
         if (value) {
           onError.call("Contact mis à jour", Colors.green);
           context.replace('/contacts');

@@ -3,6 +3,7 @@ import 'package:front/models/contact.model.dart';
 import 'package:front/services/api.service.dart';
 import 'package:front/views/contacts.view.dart';
 import 'package:front/views/create_contact.view.dart';
+import 'package:front/views/groups.view.dart';
 import 'package:go_router/go_router.dart';
 
 void main() {
@@ -10,12 +11,16 @@ void main() {
     initialLocation: '/contacts',
     routes: [
       GoRoute(
+        path: '/groups',
+        builder: (context, state) => const GroupsView(),
+      ),
+      GoRoute(
         path: '/contacts',
-        builder: (context, state) => ContactsView(),
+        builder: (context, state) => const ContactsView(),
       ),
       GoRoute(
         path: '/contacts/create',
-        builder: (context, state) => const CreateContactView(),
+        builder: (context, state) => CreateContactView(),
       ),
       GoRoute(
         path: '/contacts/edit/:id',

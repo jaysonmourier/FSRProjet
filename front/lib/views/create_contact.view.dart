@@ -6,7 +6,7 @@ import 'package:front/viewmodels/create.viewmodel.dart';
 class CreateContactView extends StatefulWidget {
   final Contact? contact;
   final bool editing;
-  const CreateContactView({super.key, this.contact, this.editing = false});
+  CreateContactView({super.key, this.contact, this.editing = false});
 
   @override
   State<CreateContactView> createState() => _CreateContactViewState();

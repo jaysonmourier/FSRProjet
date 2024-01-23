@@ -1,5 +1,6 @@
 package com.miage.app.entities;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,5 +21,6 @@ public class PhoneNumber {
 
     @ManyToOne
     @JoinColumn(name = "contact_id")
+    @JsonbTransient
     private Contact contact;
 }
