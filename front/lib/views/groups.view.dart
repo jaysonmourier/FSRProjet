@@ -88,7 +88,7 @@ class _GroupsViewState extends State<GroupsView> {
       onDismissed: (direction) => _deleteGroup(group, index),
       child: ListTile(
         title: _buildGroupTitle(group),
-        onTap: () => context.go('/groups/${group.id}'),
+        onTap: () => context.push('/groups/${group.id}'),
       ),
     );
   }

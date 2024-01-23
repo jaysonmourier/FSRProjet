@@ -77,6 +77,7 @@ public class UserGroupService {
 
     public List<ContactShortDTO> getContactsInGroup(Long groupId) {
         UserGroup group = userGroupDAO.find(groupId);
+        System.out.println("GROUP: " + group);
         if (group != null) {
             return group.getContacts().stream()
                     .map(DTOConverter::convertContactToContactShortDTO)

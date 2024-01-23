@@ -172,4 +172,20 @@ class Api {
       return false;
     }
   }
+
+  Future<List<Contact>> getContactsByGroup(int groupId) async {
+    var url = Uri.parse('$groups/$groupId/get');
+    var res = await http.get(url, headers: headers);
+    if (res.statusCode == 200) {
+      String decoded = utf8.decode(res.bodyBytes);
+      List<dynamic> jsonList = jsonDecode(decoded);
+
+      List<Contact> contactList =
+          jsonList.map((jsonItem) => Contact.fromJson(jsonItem)).toList();
+
+      return contactList;
+    } else {
+      return [];
+    }
+  }
 }
