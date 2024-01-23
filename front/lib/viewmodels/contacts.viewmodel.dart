@@ -17,7 +17,6 @@ class ContactsViewModel with ChangeNotifier {
       _contacts = contacts!;
       notifyListeners();
     } catch (e) {
-      // Gérer l'erreur
     }
   }
 
@@ -30,7 +29,6 @@ class ContactsViewModel with ChangeNotifier {
       }
       return success;
     } catch (e) {
-      // Gérer l'erreur
       return false;
     }
   }
@@ -38,6 +36,5 @@ class ContactsViewModel with ChangeNotifier {
   @override
   void dispose() {
     super.dispose();
-    // Fermer d'autres ressources si nécessaire
   }
 }
