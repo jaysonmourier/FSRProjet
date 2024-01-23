@@ -35,7 +35,7 @@ class _CreateContactViewState extends State<CreateContactView> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Créer un contact'),
+          title: Text("${widget.editing ? 'Editer' : 'Créer'} un contact"),
         ),
         body: SingleChildScrollView( 
           padding: const EdgeInsets.all(32.0),

@@ -53,6 +53,13 @@ public class UserGroupController {
         return Response.status(Response.Status.CREATED).entity(newGroup).build();
     }
 
+    @DELETE
+    @Path("/{groupId}/remove/{contactId}")
+    public Response removeContact(@PathParam("groupId") Long groupId, @PathParam("contactId") Long contactId) {
+        boolean r = userGroupService.removeContactFromGroup(groupId, contactId);
+        return Response.status(Response.Status.NO_CONTENT).entity(r).build();
+    }
+
     @GET
     @Path("/{groupId}/get")
     public Response getContactsInGroup(@PathParam("groupId") Long groupId) {

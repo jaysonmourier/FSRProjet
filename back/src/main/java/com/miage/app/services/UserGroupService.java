@@ -38,7 +38,7 @@ public class UserGroupService {
             userGroupDAO.delete(group);
         }
     }
-    
+
     private UserGroup convertToEntity(UserGroupDTO groupDTO) {
         UserGroup group = new UserGroup();
         group.setGroupId(groupDTO.getGroupId());
@@ -83,5 +83,9 @@ public class UserGroupService {
                     .collect(Collectors.toList());
         }
         return null;
+    }
+
+    public boolean removeContactFromGroup(Long groupId, Long contactId) {
+        return userGroupDAO.removeContactFromGroup(groupId, contactId);
     }
 }

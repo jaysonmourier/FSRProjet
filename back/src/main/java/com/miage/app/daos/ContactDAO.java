@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.NoResultException;
 
 import com.miage.app.entities.Contact;
 import com.miage.app.entities.PhoneNumber;

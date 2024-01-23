@@ -6,7 +6,7 @@ import 'package:front/models/contact.model.dart';
 
 class Api {
   static const String port = "8082";
-  static const String baseUrl = 'http://192.168.1.80:$port/api';
+  static const String baseUrl = 'http://localhost:$port/api';
   static const String contacts = '$baseUrl/contacts';
   static const String groups = '$baseUrl/usergroups';
 
@@ -126,18 +126,50 @@ class Api {
     }
   }
 
-Future<bool> deleteGroup(int groupId) async {
-  try {
-    var url = Uri.parse('$groups/$groupId');
-    var response = await http.delete(url, headers: headers);
-    if (response.statusCode == 204) {
-      return true;
-    } else {
+  Future<bool> deleteGroup(int groupId) async {
+    try {
+      var url = Uri.parse('$groups/$groupId');
+      var response = await http.delete(url, headers: headers);
+      if (response.statusCode == 204) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
       return false;
     }
-  } catch (e) {
-    return false;
   }
-}
 
+  Future<bool> addUserToGroup(int groupId, int userId) async {
+    try {
+      var url = Uri.parse('$groups/$groupId/add');
+      var response = await http.post(url,
+          headers: headers,
+          body: jsonEncode([
+            {'id': userId.toString()}
+          ]));
+      if (response.statusCode == 201) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> removeUserFromGroup(int groupId, int userId) async {
+    try {
+      var url = Uri.parse('$groups/$groupId/remove/$userId');
+      var response = await http.delete(url,
+          headers: headers);
+      if (response.statusCode == 204) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
 }

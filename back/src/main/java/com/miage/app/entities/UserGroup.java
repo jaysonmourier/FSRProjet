@@ -33,4 +33,9 @@ public class UserGroup {
         contacts.add(contact);
         contact.getGroups().add(this);
     }
+
+    public void removeContact(Contact contact) {
+        contacts.remove(contact);
+        contact.getGroups().remove(this);
+    }
 }
